@@ -17,11 +17,37 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    overflow: hidden;
+}
+
+.aftermath-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly !important;
+    align-items: center;
+}
+
+.aftermath {
+    font-weight: 400;
+    font-size: 2rem;
+    letter-spacing: +0.5px;
+}
+
+.aftermath.correct {
+    color: rgb(179, 240, 84);
+}
+
+.aftermath.wrong {
+    color: rgb(233, 79, 100);
 }
 
 @media (max-width: 728px) {
     .main-app {
         flex-direction: column-reverse;
         height: auto;
+    }
+
+    .aftermath {
+        font-size: 1.5rem;
     }
 }

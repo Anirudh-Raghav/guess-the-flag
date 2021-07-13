@@ -4,6 +4,9 @@ import React, { Component } from 'react';
 import questionStates from '../../constants/questionStates.js';
 import QuestionFlag from '../../components/Flag/Flag.js';
 import QuestionOptions from '../../components/Question/Question.js';
+import NextButton from '../../components/NextButton/NextButton.js';
+
+import SyncLoader from "react-spinners/SyncLoader";
 
 import './CountryGame.css';
 
@@ -16,11 +19,10 @@ class CountryGame extends Component {
             flag: undefined,
             options: [],
             correct: undefined,
-            questionState: questionStates.QUESTION,
-            tries: 3
+            questionState: undefined,
         }
 
-        this.onAnswer = this.onAnswer.bind(this);
+        this.onAttempt = this.onAttempt.bind(this);
         this.nextQuestion = this.nextQuestion.bind(this);
     }
 
@@ -39,7 +41,7 @@ class CountryGame extends Component {
         // Setting up the options
         question.options.push(correct);
         for (let i = 0; i < 3; i++) {
-            question.options.push(this.getOption(correctId, countries));
+            question.options.push(this.getOption(question.options, countries));
         }
         question.options = this.shuffle(question.options);
 
@@ -47,20 +49,25 @@ class CountryGame extends Component {
     }
 
     // Gets one random option which isn't the answer to the question
-    getOption(correctId, countries) {
+    getOption(arr, countries) {
         const optionId = Math.floor(Math.random() * countries.length);
-        if (optionId === correctId) {
-            return this.getOption(correctId, countries);
+        const option = { id: optionId, name: countries[optionId].name }
+        if (arr.includes(option)) {
+            return this.getOption(arr, countries);
         }
 
-        return { id: optionId, name: countries[optionId].name };
+        return option;
     }
 
-    onAnswer(guess) {
-        const { correct } = this.state;
-        if (correct) {
-            if (guess === correct) this.setState({ questionState: questionStates.CORRECT_ANSWER });
-            else this.setState({ questionState: questionStates.WRONG_ANSWER });
+    onAttempt(guess) {
+        const correctId = this.state.correct.id;
+        if (correctId) {
+            if (parseInt(guess) === correctId) {
+                this.setState({ questionState: questionStates.CORRECT_ANSWER });
+            }
+            else {
+                this.setState({ questionState: questionStates.WRONG_ANSWER });
+            }
         }
     }
 
@@ -92,7 +99,6 @@ class CountryGame extends Component {
             options: question.options,
             correct: question.correct,
             questionState: questionStates.QUESTION,
-            tries: 3
         });
     }
 
@@ -113,11 +119,39 @@ class CountryGame extends Component {
     }
 
     render() {
+
+        let output;
+
+        switch (this.state.questionState) {
+            case questionStates.QUESTION:
+                output = (<>
+                    <QuestionOptions correctAnswer={this.state.correct} options={this.state.options} questionState={this.state.questionState} handleAttempt={this.onAttempt} nextQuestion={this.nextQuestion} />
+                    <QuestionFlag url={this.state.flag} />
+                </>);
+                break;
+            case questionStates.CORRECT_ANSWER:
+                output = (<div className="aftermath-container">
+                    <h1 className="aftermath correct"><i className="fas fa-check"></i>&nbsp;{this.state.correct.name} is the correct answer</h1>
+                    <NextButton nextQuestion={this.nextQuestion} />
+                </div>);
+                break;
+
+            case questionStates.WRONG_ANSWER:
+                output = (<div className="aftermath-container">
+                    <h1 className="aftermath wrong"><i className="fas fa-times"></i>&nbsp;Your answer is wrong, {this.state.correct.name} is the correct</h1>
+                    <NextButton nextQuestion={this.nextQuestion} />
+                </div>);
+                break;
+            default:
+                output = (<SyncLoader color="#5b6977" size="20px" margin="5px" />)
+                break;
+
+        }
+
         return (
             <div className="container">
                 <div className="main-app">
-                    <QuestionOptions options={this.state.options} />
-                    <QuestionFlag url={this.state.flag} />
+                    {output}
                 </div>
             </div>
         )

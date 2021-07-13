@@ -1,0 +1,23 @@
+.next-button {
+    width: 30px;
+    height: 30px;
+    font-size: 2.5rem;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.next-button:hover,
+.next-button:active,
+.next-button:focus {
+    transform: scale(1.2);
+    color: rgb(70, 188, 222);
+}
+
+@media (max-width: 1000px) {
+
+    .next-button:hover,
+    .next-button:active,
+    .next-button:focus {
+        transform: scale(1.1);
+    }
+}
