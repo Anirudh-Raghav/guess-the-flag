@@ -2,7 +2,7 @@
 
 Small quiz using the [Rest countries API](https://restcountries.eu/rest/v2/all) that gives random fags with options to guess
 
-It is hosted live on [Guess the flag](https://github.com/Anirudh-Raghav/guess-the-flag)
+It is hosted live on [Guess the flag](https://guesstheflag7.netlify.app/)
 
 ## Getting started
 
