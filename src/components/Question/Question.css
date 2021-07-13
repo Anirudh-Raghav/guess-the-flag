@@ -1,0 +1,34 @@
+.options {
+    max-width: 40%;
+    max-height: 80%;
+    font-size: 1.5rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.option {
+    margin: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.option:hover {
+    color: rgb(70, 188, 222);
+}
+
+.option.wrong {
+    color: rgba(233, 79, 100, 0.5);
+    text-decoration: line-through;
+}
+
+@media (max-width: 728px) {
+    .options {
+        max-width: 80%;
+        font-size: 1.2rem;
+    }
+}
